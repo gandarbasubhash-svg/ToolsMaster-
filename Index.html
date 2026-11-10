@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToolMaster - Free Online Tools</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f5ff;color:#20213b}
+header{background:#24204c;color:white;padding:25px 16px;text-align:center}
+header h1{margin:0;font-size:30px}
+header p{color:#d8d4ff}
+main{max-width:900px;margin:25px auto;padding:12px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}
+.card{background:white;padding:20px;border-radius:14px;box-shadow:0 3px 15px #20204c12}
+h2{font-size:19px;color:#4938a8}
+input,textarea,select,button{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:8px;font-size:15px}
+button{background:#5945c5;color:white;border:0;font-weight:bold;cursor:pointer}
+button:hover{background:#392a91}
+.result{font-weight:bold;color:#4938a8;overflow-wrap:anywhere}
+footer{text-align:center;padding:25px;color:#777}
+</style>
+</head>
+<body>
+<header>
+<h1>ToolMaster</h1>
+<p>Free Online Tools for Everyone</p>
+</header>
+<main>
+<h2>Explore Our Free Tools</h2>
+<div class="tools">
+
+<div class="card">
+<h2>🧮 Calculator</h2>
+<input id="calc" type="text" placeholder="Example: 25+30*2">
+<button onclick="calculate()">Calculate</button>
+<p class="result" id="calcResult">Result appears here</p>
+</div>
+
+<div class="card">
+<h2>📝 Word Counter</h2>
+<textarea id="words" placeholder="Write or paste your text..." oninput="countWords()"></textarea>
+<p class="result" id="wordResult">Words: 0 | Characters: 0</p>
+</div>
+
+<div class="card">
+<h2>🎂 Age Calculator</h2>
+<input type="date" id="birthday">
+<button onclick="ageCalc()">Calculate Age</button>
+<p class="result" id="ageResult"></p>
+</div>
+
+<div class="card">
+<h2>🔐 Password Generator</h2>
+<input type="number" id="length" value="12" min="6" max="40" placeholder="Password length">
+<button onclick="makePassword()">Generate Password</button>
+<p class="result" id="passwordResult"></p>
+</div>
+
+<div class="card">
+<h2>📏 Unit Converter</h2>
+<input type="number" id="km" placeholder="Enter kilometers">
+<button onclick="convertKm()">Convert to Miles</button>
+<p class="result" id="kmResult"></p>
+</div>
+
+<div class="card">
+<h2>ℹ️ About ToolMaster</h2>
+<p>ToolMaster provides simple, useful and free online tools for everyone.</p>
+</div>
+
+</div>
+</main>
+<footer>© 2026 ToolMaster. All rights reserved.</footer>
+
+<script>
+function calculate(){
+try{
+let x=document.getElementById('calc').value;
+if(!/^[0-9+\-*/().\s%]+$/.test(x)) throw Error();
+let result=Function('"use strict";return ('+x+')')();
+if(!Number.isFinite(result)) throw Error();
+document.getElementById('calcResult').textContent="Result: "+result;
+}catch(e){
+document.getElementById('calcResult').textContent="Invalid calculation";
+}
+}
+
+function countWords(){
+let t=document.getElementById('words').value.trim();
+let w=t?t.split(/\s+/).length:0;
+document.getElementById('wordResult').textContent=
+"Words: "+w+" | Characters: "+document.getElementById('words').value.length;
+}
+
+function ageCalc(){
+let d=document.getElementById('birthday').value;
+if(!d)return alert("Please select your birthday");
+let b=new Date(d+"T00:00:00");
+let now=new Date();
+if(b>now)return alert("Invalid date");
+let age=now.getFullYear()-b.getFullYear();
+if(now.getMonth()<b.getMonth()||(now.getMonth()===b.getMonth()&&now.getDate()<b.getDate()))age--;
+document.getElementById('ageResult').textContent="Your age: "+age+" years";
+}
+
+function makePassword(){
+let n=Number(document.getElementById('length').value);
+if(!Number.isInteger(n)||n<6||n>40)return alert("Choose 6 to 40 characters");
+let chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+let p="";
+let random=new Uint32Array(n);
+crypto.getRandomValues(random);
+for(let i=0;i<n;i++)p+=chars[random[i]%chars.length];
+document.getElementById('passwordResult').textContent=p;
+}
+
+function convertKm(){
+let n=Number(document.getElementById('km').value);
+if(document.getElementById('km').value.trim()===""||!Number.isFinite(n)||n<0)return alert("Enter a valid distance");
+document.getElementById('kmResult').textContent=(n*0.621371).toFixed(3)+" miles";
+}
+</script>
+</body>
+</html>
